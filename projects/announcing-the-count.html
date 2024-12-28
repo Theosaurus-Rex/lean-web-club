@@ -1,0 +1,19 @@
+<label for="text">Enter your text below.</label>
+<textarea id="text"></textarea>
+
+<p id="count" aria-live="polite">You've written 0 words and 0 characters.</p>
+
+<script>
+  const textArea = document.getElementById("text");
+  let count = document.querySelector("#count");
+
+  textArea.addEventListener("input", function () {
+    // Get the word count, filtering out spaces so they are not counted as words
+    let words = text.value.split(/[\s]+/g).filter(function (word) {
+      return word.length;
+    });
+
+    // Display the current counts
+    count.textContent = `You've written ${words.length} words and ${text.value.length} characters.`;
+  });
+</script>
