@@ -1,0 +1,48 @@
+<blockquote id="quote" aria-live="polite">
+  <em>Getting a fresh quote...</em>
+</blockquote>
+
+<p>
+  <button id="get-quote">More Ron</button>
+</p>
+
+<script>
+  let quote = document.getElementById("quote");
+  let button = document.getElementById("get-quote");
+  // Hold the quotes shown to the user previously
+  let quotes = [];
+  function getQuote() {
+    // Get a new quote, then render it to the DOM
+    fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+        throw response.status;
+      })
+      .then(function (data) {
+        // Limit the number of quotes that go "stale" to 50
+        if (quotes.length > 49) {
+          quotes.shift();
+        }
+
+        // If this quote was already used, recursively fetch a new one
+        // Then, end the current callback function
+        if (quotes.includes(data[0])) {
+          getQuote();
+          return;
+        }
+
+        // Otherwise, update the UI and add the quote to the list
+        quote.textContent = data[0];
+        quotes.push(data[0]);
+      })
+      .catch(function (error) {
+        // If there was an error, update the quote element with an error message
+        quote.textContent =
+          "Something went wrong retrieving your quote, sorry!";
+      });
+  }
+  getQuote();
+  button.addEventListener("click", getQuote);
+</script>
