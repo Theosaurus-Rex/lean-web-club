@@ -1,0 +1,34 @@
+<blockquote id="quote" aria-live="polite">
+  <em>Getting a fresh quote...</em>
+</blockquote>
+
+<p>
+  <button id="get-quote">More Ron</button>
+</p>
+
+<script>
+  let quote = document.getElementById("quote");
+  let button = document.getElementById("get-quote");
+
+  function getQuote() {
+    // Get a new quote, then render it to the DOM
+    fetch("https://ron-swanson-quotes.herokuapp.com/v2/quotes")
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        }
+        throw response.status;
+      })
+      .then(function (data) {
+        // Fill in the quote element with the quote
+        quote.textContent = data[0];
+      })
+      .catch(function (error) {
+        // If there was an error, update the quote element with an error message
+        quote.textContent =
+          "Something went wrong retrieving your quote, sorry!";
+      });
+  }
+  getQuote();
+  button.addEventListener("click", getQuote);
+</script>
